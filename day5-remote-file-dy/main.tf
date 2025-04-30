@@ -5,7 +5,7 @@
 # }
 # resource "aws_vpc" "name" {
 #   cidr_block = "10.0.0.0/16"
- # depends_on = [ aws_instance.day-4 ]
+# #  depends_on = [ aws_instance.day-4 ]
   
 #  }
 #creating s3 bucket and dynamo DB for state backend storgae and applying the lock mechanisam for statefile

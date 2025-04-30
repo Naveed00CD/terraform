@@ -1,3 +1,9 @@
+
+  provider "aws" {
+  region = "ap-south-1" # or whatever region you're targeting
+}
+
+
 # VPC
 resource "aws_vpc" "dev" {
     cidr_block = "10.0.0.0/16"
@@ -72,12 +78,12 @@ egress {
   }
 
   }
-resource "aws_key_pair" "name" {
-    key_name = "public"
-    public_key = file("~/.ssh/id_rsa.pub") #here you need to define public key file path
+# resource "aws_key_pair" "name" {
+#     key_name = "public"
+#     public_key = file("~/.ssh/id_rsa.pub") #here you need to define public key file path
 
   
-}
+# }
 
 
 # Launch server
@@ -86,7 +92,7 @@ resource "aws_instance" "name" {
     instance_type = var.instance_type
     subnet_id = aws_subnet.public.id
     associate_public_ip_address = true
-    key_name               = aws_key_pair.name.key_name
+    # key_name               = aws_key_pair.name.key_name
     vpc_security_group_ids = [aws_security_group.allow_tls.id]
 
     
