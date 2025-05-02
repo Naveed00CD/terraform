@@ -29,3 +29,9 @@ resource "aws_instance" "example" {
     Name = "ec2_k"  # AWS console displays "Name" (case-sensitive)
   }
 }
+
+
+
+resource "aws_s3_bucket" "s3tf" {
+  bucket = "serxdcfvgbhjncgfhlk"
+}
