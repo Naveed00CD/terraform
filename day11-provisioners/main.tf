@@ -1,33 +1,44 @@
+# Define the AWS provider configuration.
 provider "aws" {
-    region = "ap-south-1"
-  
+  region = "ap-south-1"  # Replace with your desired AWS region.
 }
 
-resource "aws_instance" "nav" {
-    ami = "ami-0dba43d6637e22dd8"
-    instance_type = "t2.micro"
-    
-    provisioner "local-exec" {
-        command = "the public_ip is ${self.public_ip}> file_ip.txt"
-    }
 
-    provisioner "remote-exec" {
-        inline = [ touch "file100t", "echo test naveed the ip is  ${self.public.id} >> file100t"
-         ]
-      
-    }
-  
+resource "aws_key_pair" "example" {
+  key_name   = "key01"  # Replace with your desired key name
+  public_key = file("~/.ssh/id_ed25519.pub") 
+  #public_key = file("C:/Users/PC/Downloads/key01.pem")
+
+
 }
+resource "aws_instance" "server" {
+  ami                    = "ami-0081f0d5081b58505"
+  instance_type          = "t2.micro"
+  key_name      = aws_key_pair.example.key_name
+  
 
-# #provisioners
-# resource "aws_instance" "example" {
-#   ami           = "ami-0261755bbcb8c4a84"
-#   instance_type = "t2.micro"
-#   tags = {
-#     Name = "null resource"
-#   }
-
-#   provisioner "local-exec" {
-#     command = "echo Instance public IP is ${self.private_ip} > instance_info.txt"
-#   }
-# }
+  connection {
+    type        = "ssh"
+    user        = "ec2-user"  # Replace with the appropriate username for your EC2 instance
+    #private_key = file("C:/Users/PC/Downloads/key01.pem")
+    private_key = file("~/.ssh/id_ed25519")  #private key path
+    host        = self.public_ip
+  }
+  # local execution procee 
+ provisioner "local-exec" {
+    command = "touch file85" #mysql -h -u user -p
+   
+ }
+  # File provisioner to copy a file from local to the remote EC2 instance
+  provisioner "file" {
+    source      = "filek10"  # Replace with the path to your local file
+    destination = "/home/ec2-user/file10"  # Replace with the path on the remote instance
+  }
+  # remote execution process 
+  provisioner "remote-exec" {
+    inline = [
+"touch file200",
+"echo hello from aws >> file200", ##mysql -h -u user -p
+]
+ }
+}
