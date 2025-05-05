@@ -19,8 +19,11 @@ data "aws_vpc" "name" {
       name = "tag:name"
       values = ["VPC A"]
     }
+
+
   
 }
+data
 
 resource "aws_instance" "name" {
     ami="ami-0081f0d5081b58505"
