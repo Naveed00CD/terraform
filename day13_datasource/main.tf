@@ -23,7 +23,7 @@ data "aws_vpc" "name" {
 
   
 }
-data
+
 
 resource "aws_instance" "name" {
     ami="ami-0081f0d5081b58505"

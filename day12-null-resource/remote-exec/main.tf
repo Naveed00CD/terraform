@@ -4,7 +4,7 @@ provider "aws" {
 }
 
 resource "aws_secretsmanager_secret" "rds_secret" {
-  name = "your-secret-name"
+  name = "your-secret-name-new"
 }
 
 
@@ -49,7 +49,7 @@ resource "null_resource" "remote_sql_exec" {
   connection {
     type        = "ssh"
     user        = "ec2-user"
-    private_key = file("~/.ssh/Test.pem")   # Replace with your PEM file path
+    private_key = file("~/.ssh/TEST.pem")   # Replace with your PEM file path
     host        = aws_instance.sql_runner.public_ip
   }
 
@@ -59,9 +59,17 @@ resource "null_resource" "remote_sql_exec" {
   }
 
   provisioner "remote-exec" {
+    inline = [   "sudo apt-get update",
+      "sudo dnf install -y mariadb105", ]
+    
+  }
+
+
+  provisioner "remote-exec" {
     inline = [
       "mysql -h ${aws_db_instance.mysql_rds.address} -u ${jsondecode(aws_secretsmanager_secret_version.rds_secret_value.secret_string)["username"]} -p${jsondecode(aws_secretsmanager_secret_version.rds_secret_value.secret_string)["password"]} < /tmp/init.sql"
     ]
+    
   }
 
   triggers = {
